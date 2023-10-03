@@ -47,7 +47,8 @@ resource "aws_codepipeline" "codepipeline-ui" {
 
 
 resource "aws_s3_bucket" "codepipeline_bucket_ui" {
-  bucket = "pipeline-vtbxmck-ui"
+  force_destroy = true
+  bucket        = "pipeline-vtbxmck-ui"
 }
 
 data "aws_iam_policy_document" "assume_role_pipeline" {

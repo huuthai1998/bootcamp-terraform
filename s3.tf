@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "example" {
-  bucket = "vtbxmck-bootcamp-ui"
+  force_destroy = true
+  bucket        = "vtbxmck-bootcamp-ui"
 }
 
 resource "aws_s3_bucket_website_configuration" "example" {

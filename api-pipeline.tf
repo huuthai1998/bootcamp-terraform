@@ -46,7 +46,8 @@ resource "aws_codepipeline" "codepipeline-api" {
 }
 
 resource "aws_s3_bucket" "codepipeline_bucket_api" {
-  bucket = "pipeline-vtbxmck-api"
+  force_destroy = true
+  bucket        = "pipeline-vtbxmck-api"
 }
 
 resource "aws_iam_role" "codepipeline_role_api" {

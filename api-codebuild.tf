@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "bootcamp-codebuild" {
-  bucket = "codebuild-log-vtb-bootcamp"
+  force_destroy = true
+  bucket        = "codebuild-log-vtb-bootcamp"
 }
 
 resource "aws_iam_role" "codebuild_api" {
@@ -104,15 +105,15 @@ resource "aws_codebuild_project" "api" {
 
     environment_variable {
       name  = "ECR_REPO_URL"
-      value = "371198079589.dkr.ecr.us-east-1.amazonaws.com"
+      value = aws_ecr_repository.api.repository_url
     }
     environment_variable {
       name  = "EKS_ROLE_ARN"
-      value = "arn:aws:iam::371198079589:role/FullEksCluster"
+      value = aws_iam_role.full_eks_permission_role.arn
     }
     environment_variable {
       name  = "EKS_CLUSTER_NAME"
-      value = "vtbxmck-bootcamp"
+      value = module.eks_cluster.eks_cluster_details.name
     }
     environment_variable {
       name  = "DEPLOYMENT_YML_FILE"

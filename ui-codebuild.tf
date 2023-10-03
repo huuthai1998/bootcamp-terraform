@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "bootcamp-codebuild--ui" {
-  bucket = "codebuild-log-vtb-bootcamp-ui"
+  force_destroy = true
+  bucket        = "codebuild-log-vtb-bootcamp-ui"
 }
 
 data "aws_iam_policy_document" "assume_role" {
