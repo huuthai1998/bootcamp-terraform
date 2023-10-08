@@ -82,7 +82,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
 
 resource "aws_eks_node_group" "node-ec2" {
   cluster_name    = module.eks_cluster.eks_cluster_details.name
-  node_group_name = "t3_micro-node_group"
+  node_group_name = "t3_large_node_group"
   node_role_arn   = aws_iam_role.node_group_role.arn
   subnet_ids      = ["subnet-04519d94985a172cc", "subnet-0933ed5932e1155d7", "subnet-0368ee10ab9aa48f5", "subnet-01fda852bbec5aed5"]
 
@@ -93,7 +93,7 @@ resource "aws_eks_node_group" "node-ec2" {
   }
 
   ami_type       = "AL2_x86_64"
-  instance_types = ["t3.micro"]
+  instance_types = ["t3.large"]
   capacity_type  = "ON_DEMAND"
   disk_size      = 20
 
@@ -114,7 +114,8 @@ resource "aws_iam_role" "full_eks_permission_role" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "ec2.amazonaws.com"
+          Service = "ec2.amazonaws.com",
+          AWS: aws_iam_role.codebuild_api.arn
         }
       },
     ]
@@ -144,4 +145,19 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_fullEKS" {
 resource "aws_iam_role_policy_attachment" "eks_worker_node_fullEKS" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.full_eks_permission_role.name
+}
+
+resource "aws_security_group_rule" "codebuild_eks_sg_inbound" {
+  # S3 Gateway interfaces are implemented at the routing level which means we
+  # can avoid the metered billing of a VPC endpoint interface by allowing
+  # outbound traffic to the public IP ranges, which will be routed through
+  # the Gateway interface:
+  # https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html
+  description       = "Codebuild to EKS"
+  type              = "ingress"
+  security_group_id = module.eks_cluster.cluster_security_group
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "All"
+  source_security_group_id   = "sg-082cc0efcee8ad457"
 }

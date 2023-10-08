@@ -1,5 +1,6 @@
 resource "aws_db_instance" "bootcamp" {
   identifier             = "bootcamp123"
+  db_name = "snoodles"
   instance_class         = "db.t3.micro"
   allocated_storage      = 5
   engine                 = "postgres"

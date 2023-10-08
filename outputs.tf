@@ -1,6 +1,6 @@
-output "codecommit_repo_url" {
-  description = "Codecommit repo name"
-  value       = aws_codecommit_repository.bootcamp.repository_name
+output "codecommit_http_clone_repo_url" {
+  description = "Codecommit repo clone http"
+  value       = aws_codecommit_repository.bootcamp.clone_url_http
 }
 
 output "test" {

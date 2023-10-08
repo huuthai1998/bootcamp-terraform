@@ -38,6 +38,16 @@ data "aws_iam_policy_document" "codebuild_ui" {
     effect = "Allow"
 
     actions = [
+      "codecommit:GitPull",
+    ]
+
+    resources = [aws_codecommit_repository.bootcamp.arn]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
       "ec2:CreateNetworkInterface",
       "ec2:DescribeDhcpOptions",
       "ec2:DescribeNetworkInterfaces",

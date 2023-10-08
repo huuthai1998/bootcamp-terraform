@@ -19,13 +19,13 @@ phases:
       - echo "Build started on `date`"
       - echo "Building the Docker image..."
       - docker build -t bootcamp-api .
-      - docker tag bootcamp-api:latest $ECR_REPO_URL/$ECR_IMAGE_NAME:latest
+      - docker tag bootcamp-api:latest $ECR_REPO_URL:latest
   post_build:
     commands:
       # Push Docker Image to ECR Repository
       - echo "Build completed on `date`"
       - echo "Pushing the Docker image to ECR Repository"
-      - docker push $ECR_REPO_URL/$ECR_IMAGE_NAME:latest
+      - docker push $ECR_REPO_URL:latest
       - echo "Docker Image Push to ECR Completed -  $REPOSITORY_URI:$TAG"
       # Extracting AWS Credential Information using STS Assume Role for kubectl
       - echo "Setting Environment Variables related to AWS CLI for Kube Config Setup"
@@ -40,6 +40,8 @@ phases:
       # Apply changes to our Application using kubectl
       - echo "Apply changes to kube manifests"
       - kubectl apply -f $DEPLOYMENT_YML_FILE
+      - kubectl apply -f ALB.yml
+      - kubectl get svc
       - echo "Completed applying changes to Kubernetes Objects"
 
 artifacts:

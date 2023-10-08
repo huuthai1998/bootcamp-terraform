@@ -46,6 +46,16 @@ data "aws_iam_policy_document" "codebuild_api" {
     resources = ["*"]
   }
 
+    statement {
+    effect = "Allow"
+
+    actions = [
+      "codecommit:GitPull",
+    ]
+
+    resources = [aws_codecommit_repository.bootcamp.arn]
+  }
+
   statement {
     effect    = "Allow"
     actions   = ["ec2:CreateNetworkInterfacePermission"]
