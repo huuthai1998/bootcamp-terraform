@@ -1,5 +1,17 @@
 # bootcamp-terraform
 
+- This creates the following resources:
+  - Codecommit to save source code
+  - Codebuild + Codepipeline for both backend and frontend
+  - RDS postgres for database
+  - S3 buckets to host static website for frontend
+  - ECR to store Backend image
+  - EKS to deploy Backend
+
+# Prerequisite
+
+- A default VPC with route table, public subnets with internet gateway, private subnets with NAT Gateway. Replace those subnets' ids with the hard-coded values.
+
 # Manual steps:
 
 - Push code to codecommit to trigger pipeline after terraform created the resources.
