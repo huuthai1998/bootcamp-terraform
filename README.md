@@ -12,7 +12,7 @@
 
 - A default VPC with route table, public subnets with internet gateway, private subnets with NAT Gateway. Replace those subnets' ids with the hard-coded values.
 
-# Manual steps:
+# Manual steps
 
 - Push code to codecommit to trigger pipeline after terraform created the resources.
 
