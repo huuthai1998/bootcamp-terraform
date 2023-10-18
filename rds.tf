@@ -1,5 +1,5 @@
 resource "aws_db_instance" "bootcamp" {
-  identifier             = "bootcamp123"
+  identifier             = "bootcamp-demo"
   db_name                = "snoodles"
   instance_class         = "db.t3.micro"
   allocated_storage      = 5
