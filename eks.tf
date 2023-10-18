@@ -19,29 +19,28 @@ module "eks_cluster" {
   }
 }
 
-# resource "aws_eks_addon" "ebs-csi" {
-#   cluster_name = module.eks_cluster.eks_cluster_details.name
-#   addon_name   = "aws-ebs-csi-driver"
-#   addon_version = "v1.23.0-eksbuild.1"
-#   depends_on = [ aws_eks_node_group.node-ec2 ]
-# }
+resource "aws_eks_addon" "ebs-csi" {
+  cluster_name = module.eks_cluster.eks_cluster_details.name
+  addon_name   = "aws-ebs-csi-driver"
+  depends_on   = [aws_eks_node_group.node-ec2]
+}
 
 resource "aws_eks_addon" "vpc-cni" {
   cluster_name = module.eks_cluster.eks_cluster_details.name
   addon_name   = "vpc-cni"
-  depends_on = [ aws_eks_node_group.node-ec2 ]
+  depends_on   = [aws_eks_node_group.node-ec2]
 }
 
 resource "aws_eks_addon" "kube-proxy" {
   cluster_name = module.eks_cluster.eks_cluster_details.name
   addon_name   = "kube-proxy"
-  depends_on = [ aws_eks_node_group.node-ec2 ]
+  depends_on   = [aws_eks_node_group.node-ec2]
 }
 
 resource "aws_eks_addon" "coredns" {
   cluster_name = module.eks_cluster.eks_cluster_details.name
   addon_name   = "coredns"
-  depends_on = [ aws_eks_node_group.node-ec2 ]
+  depends_on   = [aws_eks_node_group.node-ec2]
 }
 
 resource "aws_s3_bucket" "eks" {
@@ -115,7 +114,7 @@ resource "aws_iam_role" "full_eks_permission_role" {
         Effect = "Allow"
         Principal = {
           Service = "ec2.amazonaws.com",
-          AWS: aws_iam_role.codebuild_api.arn
+          AWS : aws_iam_role.codebuild_api.arn
         }
       },
     ]
@@ -153,11 +152,11 @@ resource "aws_security_group_rule" "codebuild_eks_sg_inbound" {
   # outbound traffic to the public IP ranges, which will be routed through
   # the Gateway interface:
   # https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html
-  description       = "Codebuild to EKS"
-  type              = "ingress"
-  security_group_id = module.eks_cluster.cluster_security_group
-  from_port         = 0
-  to_port           = 65535
-  protocol          = "All"
-  source_security_group_id   = "sg-082cc0efcee8ad457"
+  description              = "Codebuild to EKS"
+  type                     = "ingress"
+  security_group_id        = module.eks_cluster.cluster_security_group
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "All"
+  source_security_group_id = "sg-082cc0efcee8ad457"
 }
